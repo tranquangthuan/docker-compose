@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  mysql-service-db:
+    container_name: mysql-service-db-container
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mysqldb
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+    volumes:
+      - mysql-service-db-data:/var/lib/mysql
+
+  postgres-service-db:
+    container_name: postgres-service-db-container
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: postgresdb
+    ports:
+      - "3307:3306"
+    networks:
+      - app-network
+    volumes:
+      - postgres-service-db-data:/var/lib/mysql
+
+  mysql-service:
+    container_name: mysql-service-container
+    build:
+      context: ./mysql
+    image: mysql-service-image
+    environment:
+      DB_URL: jdbc:mysql://mysql-service-db:3306/mysqldb?useSSL=false&allowPublicKeyRetrieval=true
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-service-db
+    networks:
+      - app-network
+
+  postgres-service:
+    container_name: postgres-service-container
+    build:
+      context: ./postgres
+    image: postgres-service-image
+    environment:
+      DB_URL: jdbc:mysql://postgres-service-db:3306/postgresdb?useSSL=false&allowPublicKeyRetrieval=true
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres-service-db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  mysql-service-db-data:
+  postgres-service-db-data:

@@ -1,0 +1,18 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /mysql
+spring:
+  application:
+    name: mysql-service
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/mysql-service?useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driverClassName: "com.mysql.cj.jdbc.Driver"
+  jpa:
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true

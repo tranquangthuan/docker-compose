@@ -1,0 +1,17 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /postgres
+spring:
+  application:
+    name: postgres-service
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/postgres-service}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driverClassName: "com.mysql.cj.jdbc.Driver"
+  jpa:
+    hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
